@@ -12,10 +12,82 @@ jobs:
   test-pull-request:
     runs-on: ubuntu-latest
     steps:
-      - uses: gha-trigger/start-action@main
+      - name: test job
+        uses: gha-trigger/start-action@main
         with:
           app_id: ${{secrets.APP_ID}}
           app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+          data: |
+            {
+              "event_name": "pull_request",
+              "event": {
+                "number": 2,
+                "sender": {
+                  "login": "suzuki-shunsuke"
+                },
+                "repository": {
+                  "full_name": "gha-trigger/example-main",
+                  "name": "example-main",
+                  "owner": {
+                    "login": "gha-trigger"
+                  }
+                }
+              },
+              "pull_request": {
+                "merge_commit_sha": "361ceaafea1703b92f7710f8c3fd300b1b96a110",
+                "base": {
+                  "ref": "main"
+                },
+                "head": {
+                  "sha": "361ceaafea1703b92f7710f8c3fd300b1b96a110",
+                  "ref": "test-pr"
+                },
+                "html_url": "https://github.com/gha-trigger/example-main/pull/2"
+              }
+            }
+      - name: test workflow (skip)
+        uses: gha-trigger/start-action@main
+        env:
+          GHA_WORKFLOW_COMMIT_STATUS: "true"
+        with:
+          app_id: ${{secrets.APP_ID}}
+          app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+          data: |
+            {
+              "event_name": "pull_request",
+              "event": {
+                "number": 2,
+                "sender": {
+                  "login": "suzuki-shunsuke"
+                },
+                "repository": {
+                  "full_name": "gha-trigger/example-main",
+                  "name": "example-main",
+                  "owner": {
+                    "login": "gha-trigger"
+                  }
+                }
+              },
+              "pull_request": {
+                "merge_commit_sha": "361ceaafea1703b92f7710f8c3fd300b1b96a110",
+                "base": {
+                  "ref": "main"
+                },
+                "head": {
+                  "sha": "361ceaafea1703b92f7710f8c3fd300b1b96a110",
+                  "ref": "test-pr"
+                },
+                "html_url": "https://github.com/gha-trigger/example-main/pull/2"
+              }
+            }
+      - name: test workflow
+        uses: gha-trigger/start-action@main
+        env:
+          GHA_WORKFLOW_COMMIT_STATUS: "true"
+        with:
+          app_id: ${{secrets.APP_ID}}
+          app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+          start_workflow: true
           data: |
             {
               "event_name": "pull_request",
